@@ -1,6 +1,7 @@
 import pytest
 from playwright.sync_api import sync_playwright
 import os
+import allure
 
 @pytest.fixture(scope="function")
 def page():
@@ -23,6 +24,9 @@ def pytest_runtest_makereport(item, call):
             file_name = f"{item.name}.png"
             file_path = os.path.join(screenshot_dir, file_name)
             page.screenshot(path=file_path, full_page=True)
+            # Attach screenshot to Allure report
+            with open(file_path, "rb") as image_file:
+                allure.attach(image_file.read(), name="screenshot", attachment_type=allure.attachment_type.PNG)
             # Attach screenshot to pytest-html report (as a link)
             if hasattr(rep, 'extra'):
                 rep.extra.append(f'<a href="{file_path}" target="_blank">Screenshot</a>')
