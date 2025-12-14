@@ -2,4 +2,5 @@ playwright
 pytest
 pytest-html
 allure-pytest
-
+pytest-playwright
+allure
